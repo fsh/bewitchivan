@@ -1,0 +1,277 @@
+
+partial default alphanumeric_keys
+xkb_symbols "basic" {
+  include "no(basic)" // Based on Norwegian layout.
+  include "capslock(backspace)" // Make Caps Lock act as Backspace.
+
+  name[Group1] = "FSH Colemak (Norwegian)";
+
+  // Use LWIN for XMonad.
+  key <LWIN> { type="ONE_LEVEL", [Super_L] };
+
+  // Make AltGr select group +1 and RWIN select group +2.
+  replace key <RALT> { type="ONE_LEVEL", [ Mode_switch, Mode_switch ] };
+  replace key <RWIN> {
+    type="ONE_LEVEL",
+    symbols[Group1] = [NoSymbol],
+    symbols[Group2] = [NoSymbol],
+    symbols[Group3] = [NoSymbol],
+    symbols[Group4] = [NoSymbol],
+    actions[Group1] = [ SetGroup(group=3), SetGroup(group=3) ],
+    actions[Group2] = [ SetGroup(group=4), SetGroup(group=4) ]
+  };
+
+  key <TLDE> { symbols[Group1] = [ U2018, U2019 ] // LEFT SINGLE QUOTATION MARK, RIGHT SINGLE QUOTATION MARK
+             , symbols[Group2] = [ U201C, U201D ] // LEFT DOUBLE QUOTATION MARK, RIGHT DOUBLE QUOTATION MARK
+             , symbols[Group3] = [ U00B1, U00F7 ] // PLUS-MINUS SIGN, DIVISION SIGN
+             , symbols[Group4] = [ NoSymbol, NoSymbol ] // <none>, <none>
+  };
+  key <AE01> { symbols[Group1] = [ U0031, U00A7 ] // DIGIT ONE, SECTION SIGN
+             , symbols[Group2] = [ U2640, U2639 ] // FEMALE SIGN, WHITE FROWNING FACE
+             , symbols[Group3] = [ NoSymbol, NoSymbol ] // <none>, <none>
+             , symbols[Group4] = [ U2652, NoSymbol ] // AQUARIUS, <none>
+  };
+  key <AE02> { symbols[Group1] = [ U0032, U00B6 ] // DIGIT TWO, PILCROW SIGN
+             , symbols[Group2] = [ U2642, U263A ] // MALE SIGN, WHITE SMILING FACE
+             , symbols[Group3] = [ NoSymbol, NoSymbol ] // <none>, <none>
+             , symbols[Group4] = [ U2653, NoSymbol ] // PISCES, <none>
+  };
+  key <AE03> { symbols[Group1] = [ U0033, U00A3 ] // DIGIT THREE, POUND SIGN
+             , symbols[Group2] = [ U20DD, NoSymbol ] // U20DD, <none>
+             , symbols[Group3] = [ NoSymbol, NoSymbol ] // <none>, <none>
+             , symbols[Group4] = [ U2648, NoSymbol ] // ARIES, <none>
+  };
+  key <AE04> { symbols[Group1] = [ U0034, U00B5 ] // DIGIT FOUR, MICRO SIGN
+             , symbols[Group2] = [ U20DE, U0001F618 ] // U20DE, FACE THROWING A KISS
+             , symbols[Group3] = [ NoSymbol, NoSymbol ] // <none>, <none>
+             , symbols[Group4] = [ U2649, NoSymbol ] // TAURUS, <none>
+  };
+  key <AE05> { symbols[Group1] = [ U0035, NoSymbol ] // DIGIT FIVE, <none>
+             , symbols[Group2] = [ U2669, U266C ] // QUARTER NOTE, BEAMED SIXTEENTH NOTES
+             , symbols[Group3] = [ NoSymbol, NoSymbol ] // <none>, <none>
+             , symbols[Group4] = [ U264A, NoSymbol ] // GEMINI, <none>
+  };
+  key <AE06> { symbols[Group1] = [ U0036, NoSymbol ] // DIGIT SIX, <none>
+             , symbols[Group2] = [ U266A, U266B ] // EIGHTH NOTE, BEAMED EIGHTH NOTES
+             , symbols[Group3] = [ NoSymbol, NoSymbol ] // <none>, <none>
+             , symbols[Group4] = [ U264B, NoSymbol ] // CANCER, <none>
+  };
+  key <AE07> { symbols[Group1] = [ U0037, U221D ] // DIGIT SEVEN, PROPORTIONAL TO
+             , symbols[Group2] = [ U227A, U227C ] // PRECEDES, PRECEDES OR EQUAL TO
+             , symbols[Group3] = [ NoSymbol, NoSymbol ] // <none>, <none>
+             , symbols[Group4] = [ U264C, NoSymbol ] // LEO, <none>
+  };
+  key <AE08> { symbols[Group1] = [ U0038, U221E ] // DIGIT EIGHT, INFINITY
+             , symbols[Group2] = [ U228F, U2291 ] // SQUARE IMAGE OF, SQUARE IMAGE OF OR EQUAL TO
+             , symbols[Group3] = [ U2282, U2286 ] // SUBSET OF, SUBSET OF OR EQUAL TO
+             , symbols[Group4] = [ U264D, NoSymbol ] // VIRGO, <none>
+  };
+  key <AE09> { symbols[Group1] = [ U0039, U0336 ] // DIGIT NINE, COMBINING LONG STROKE OVERLAY
+             , symbols[Group2] = [ U2290, U2292 ] // SQUARE ORIGINAL OF, SQUARE ORIGINAL OF OR EQUAL TO
+             , symbols[Group3] = [ U2283, U2287 ] // SUPERSET OF, SUPERSET OF OR EQUAL TO
+             , symbols[Group4] = [ U264E, NoSymbol ] // LIBRA, <none>
+  };
+  key <AE10> { symbols[Group1] = [ U0030, U2205 ] // DIGIT ZERO, EMPTY SET
+             , symbols[Group2] = [ U227B, U227D ] // SUCCEEDS, SUCCEEDS OR EQUAL TO
+             , symbols[Group3] = [ NoSymbol, NoSymbol ] // <none>, <none>
+             , symbols[Group4] = [ U264F, NoSymbol ] // SCORPIUS, <none>
+  };
+  key <AE11> { symbols[Group1] = [ U2211, U220F ] // N-ARY SUMMATION, N-ARY PRODUCT
+             , symbols[Group2] = [ U2210, NoSymbol ] // N-ARY COPRODUCT, <none>
+             , symbols[Group3] = [ NoSymbol, NoSymbol ] // <none>, <none>
+             , symbols[Group4] = [ U2651, NoSymbol ] // CAPRICORN, <none>
+  };
+  key <AE12> { symbols[Group1] = [ U00A9, U00AE ] // COPYRIGHT SIGN, REGISTERED SIGN
+             , symbols[Group2] = [ U2713, U2717 ] // CHECK MARK, BALLOT X
+             , symbols[Group3] = [ U00B4, NoSymbol ] // ACUTE ACCENT, <none>
+             , symbols[Group4] = [ U2122, NoSymbol ] // TRADE MARK SIGN, <none>
+  };
+
+  key <AD01> { symbols[Group1] = [ U0071, U0051 ] // LATIN SMALL LETTER Q, LATIN CAPITAL LETTER Q
+             , symbols[Group2] = [ U003F, U00BF ] // QUESTION MARK, INVERTED QUESTION MARK
+             , symbols[Group3] = [ U220E, U211A ] // END OF PROOF, DOUBLE-STRUCK CAPITAL Q
+             , symbols[Group4] = [ NoSymbol, NoSymbol ] // <none>, <none>
+  };
+  key <AD02> { symbols[Group1] = [ U0077, U0057 ] // LATIN SMALL LETTER W, LATIN CAPITAL LETTER W
+             , symbols[Group2] = [ U0021, U00A1 ] // EXCLAMATION MARK, INVERTED EXCLAMATION MARK
+             , symbols[Group3] = [ NoSymbol, NoSymbol ] // <none>, <none>
+             , symbols[Group4] = [ NoSymbol, NoSymbol ] // <none>, <none>
+  };
+  key <AD03> { symbols[Group1] = [ U0066, U0046 ] // LATIN SMALL LETTER F, LATIN CAPITAL LETTER F
+             , symbols[Group2] = [ U0024, U00A2 ] // DOLLAR SIGN, CENT SIGN
+             , symbols[Group3] = [ U222B, NoSymbol ] // INTEGRAL, <none>
+             , symbols[Group4] = [ NoSymbol, NoSymbol ] // <none>, <none>
+  };
+  key <AD04> { symbols[Group1] = [ U0070, U0050 ] // LATIN SMALL LETTER P, LATIN CAPITAL LETTER P
+             , symbols[Group2] = [ U002B, U2295 ] // PLUS SIGN, CIRCLED PLUS
+             , symbols[Group3] = [ NoSymbol, NoSymbol ] // <none>, <none>
+             , symbols[Group4] = [ U03C0, NoSymbol ] // GREEK SMALL LETTER PI, <none>
+  };
+  key <AD05> { symbols[Group1] = [ U0067, U0047 ] // LATIN SMALL LETTER G, LATIN CAPITAL LETTER G
+             , symbols[Group2] = [ U0026, NoSymbol ] // AMPERSAND, <none>
+             , symbols[Group3] = [ U2207, NoSymbol ] // NABLA, <none>
+             , symbols[Group4] = [ U03B3, NoSymbol ] // GREEK SMALL LETTER GAMMA, <none>
+  };
+  key <AD06> { symbols[Group1] = [ U006A, U004A ] // LATIN SMALL LETTER J, LATIN CAPITAL LETTER J
+             , symbols[Group2] = [ NoSymbol, NoSymbol ] // <none>, <none>
+             , symbols[Group3] = [ NoSymbol, NoSymbol ] // <none>, <none>
+             , symbols[Group4] = [ NoSymbol, NoSymbol ] // <none>, <none>
+  };
+  key <AD07> { symbols[Group1] = [ U006C, U004C ] // LATIN SMALL LETTER L, LATIN CAPITAL LETTER L
+             , symbols[Group2] = [ U0025, U0337 ] // PERCENT SIGN, COMBINING SHORT SOLIDUS OVERLAY
+             , symbols[Group3] = [ NoSymbol, NoSymbol ] // <none>, <none>
+             , symbols[Group4] = [ U03BB, NoSymbol ] // GREEK SMALL LETTER LAMDA, <none>
+  };
+  key <AD08> { symbols[Group1] = [ U0075, U0055 ] // LATIN SMALL LETTER U, LATIN CAPITAL LETTER U
+             , symbols[Group2] = [ U005F, U0332 ] // LOW LINE, COMBINING LOW LINE
+             , symbols[Group3] = [ U2248, U2249 ] // ALMOST EQUAL TO, NOT ALMOST EQUAL TO
+             , symbols[Group4] = [ NoSymbol, NoSymbol ] // <none>, <none>
+  };
+  key <AD09> { symbols[Group1] = [ U0079, U0059 ] // LATIN SMALL LETTER Y, LATIN CAPITAL LETTER Y
+             , symbols[Group2] = [ U003D, U2260 ] // EQUALS SIGN, NOT EQUAL TO
+             , symbols[Group3] = [ NoSymbol, NoSymbol ] // Redirect(<HOME>), Redirect(<HOME>)
+             , actions[Group3] = [ RedirectKey(key=<HOME>), RedirectKey(key=<HOME>) ]
+             , symbols[Group4] = [ NoSymbol, NoSymbol ] // <none>, <none>
+  };
+  key <AD10> { symbols[Group1] = [ U00F8, U00D8 ] // LATIN SMALL LETTER O WITH STROKE, LATIN CAPITAL LETTER O WITH STROKE
+             , symbols[Group2] = [ U0308, U030C ] // COMBINING DIAERESIS, U030C
+             , symbols[Group3] = [ NoSymbol, NoSymbol ] // Redirect(<UP>), Redirect(<UP>)
+             , actions[Group3] = [ RedirectKey(key=<UP>), RedirectKey(key=<UP>) ]
+             , symbols[Group4] = [ U2191, NoSymbol ] // UPWARDS ARROW, <none>
+  };
+  key <AD11> { symbols[Group1] = [ U00E5, U00C5 ] // LATIN SMALL LETTER A WITH RING ABOVE, LATIN CAPITAL LETTER A WITH RING ABOVE
+             , symbols[Group2] = [ U030A, U00B0 ] // U030A, DEGREE SIGN
+             , symbols[Group3] = [ NoSymbol, NoSymbol ] // Redirect(<END>), Redirect(<END>)
+             , actions[Group3] = [ RedirectKey(key=<END>), RedirectKey(key=<END>) ]
+             , symbols[Group4] = [ NoSymbol, NoSymbol ] // <none>, <none>
+  };
+  key <AD12> { symbols[Group1] = [ U00E6, U00C6 ] // LATIN SMALL LETTER AE, LATIN CAPITAL LETTER AE
+             , symbols[Group2] = [ U0304, U0305 ] // COMBINING MACRON, COMBINING OVERLINE
+             , symbols[Group3] = [ NoSymbol, NoSymbol ] // Redirect(<PGUP>), Redirect(<PGUP>)
+             , actions[Group3] = [ RedirectKey(key=<PGUP>), RedirectKey(key=<PGUP>) ]
+             , symbols[Group4] = [ NoSymbol, NoSymbol ] // <none>, <none>
+  };
+
+  key <AC01> { symbols[Group1] = [ U0061, U0041 ] // LATIN SMALL LETTER A, LATIN CAPITAL LETTER A
+             , symbols[Group2] = [ U0040, NoSymbol ] // COMMERCIAL AT, <none>
+             , symbols[Group3] = [ U2200, NoSymbol ] // FOR ALL, <none>
+             , symbols[Group4] = [ U03B1, NoSymbol ] // GREEK SMALL LETTER ALPHA, <none>
+  };
+  key <AC02> { symbols[Group1] = [ U0072, U0052 ] // LATIN SMALL LETTER R, LATIN CAPITAL LETTER R
+             , symbols[Group2] = [ U007B, NoSymbol ] // LEFT CURLY BRACKET, <none>
+             , symbols[Group3] = [ NoSymbol, U211D ] // <none>, DOUBLE-STRUCK CAPITAL R
+             , symbols[Group4] = [ NoSymbol, NoSymbol ] // <none>, <none>
+  };
+  key <AC03> { symbols[Group1] = [ U0073, U0053 ] // LATIN SMALL LETTER S, LATIN CAPITAL LETTER S
+             , symbols[Group2] = [ U005B, U27E6 ] // LEFT SQUARE BRACKET, MATHEMATICAL LEFT WHITE SQUARE BRACKET
+             , symbols[Group3] = [ U2245, U2246 ] // APPROXIMATELY EQUAL TO, APPROXIMATELY BUT NOT ACTUALLY EQUAL TO
+             , symbols[Group4] = [ U03C3, NoSymbol ] // GREEK SMALL LETTER SIGMA, <none>
+  };
+  key <AC04> { symbols[Group1] = [ U0074, U0054 ] // LATIN SMALL LETTER T, LATIN CAPITAL LETTER T
+             , symbols[Group2] = [ U0028, NoSymbol ] // LEFT PARENTHESIS, <none>
+             , symbols[Group3] = [ NoSymbol, NoSymbol ] // <none>, <none>
+             , symbols[Group4] = [ U03B8, U0398 ] // GREEK SMALL LETTER THETA, GREEK CAPITAL LETTER THETA
+  };
+  key <AC05> { symbols[Group1] = [ U0064, U0044 ] // LATIN SMALL LETTER D, LATIN CAPITAL LETTER D
+             , symbols[Group2] = [ U003C, U2264 ] // LESS-THAN SIGN, LESS-THAN OR EQUAL TO
+             , symbols[Group3] = [ U2202, U2206 ] // PARTIAL DIFFERENTIAL, INCREMENT
+             , symbols[Group4] = [ U03B4, NoSymbol ] // GREEK SMALL LETTER DELTA, <none>
+  };
+  key <AC06> { symbols[Group1] = [ U0068, U0048 ] // LATIN SMALL LETTER H, LATIN CAPITAL LETTER H
+             , symbols[Group2] = [ U003E, U2265 ] // GREATER-THAN SIGN, GREATER-THAN OR EQUAL TO
+             , symbols[Group3] = [ NoSymbol, NoSymbol ] // <none>, <none>
+             , symbols[Group4] = [ NoSymbol, NoSymbol ] // <none>, <none>
+  };
+  key <AC07> { symbols[Group1] = [ U006E, U004E ] // LATIN SMALL LETTER N, LATIN CAPITAL LETTER N
+             , symbols[Group2] = [ U0029, NoSymbol ] // RIGHT PARENTHESIS, <none>
+             , symbols[Group3] = [ U00AC, U2115 ] // NOT SIGN, DOUBLE-STRUCK CAPITAL N
+             , symbols[Group4] = [ NoSymbol, NoSymbol ] // <none>, <none>
+  };
+  key <AC08> { symbols[Group1] = [ U0065, U0045 ] // LATIN SMALL LETTER E, LATIN CAPITAL LETTER E
+             , symbols[Group2] = [ U005D, U27E7 ] // RIGHT SQUARE BRACKET, MATHEMATICAL RIGHT WHITE SQUARE BRACKET
+             , symbols[Group3] = [ U2203, U2204 ] // THERE EXISTS, THERE DOES NOT EXIST
+             , symbols[Group4] = [ U03B5, NoSymbol ] // GREEK SMALL LETTER EPSILON, <none>
+  };
+  key <AC09> { symbols[Group1] = [ U0069, U0049 ] // LATIN SMALL LETTER I, LATIN CAPITAL LETTER I
+             , symbols[Group2] = [ U007D, NoSymbol ] // RIGHT CURLY BRACKET, <none>
+             , symbols[Group3] = [ NoSymbol, NoSymbol ] // Redirect(<LEFT>), Redirect(<LEFT>)
+             , actions[Group3] = [ RedirectKey(key=<LEFT>), RedirectKey(key=<LEFT>) ]
+             , symbols[Group4] = [ U2190, NoSymbol ] // LEFTWARDS ARROW, <none>
+  };
+  key <AC10> { symbols[Group1] = [ U006F, U004F ] // LATIN SMALL LETTER O, LATIN CAPITAL LETTER O
+             , symbols[Group2] = [ U007E, U0303 ] // TILDE, COMBINING TILDE
+             , symbols[Group3] = [ NoSymbol, NoSymbol ] // Redirect(<DOWN>), Redirect(<DOWN>)
+             , actions[Group3] = [ RedirectKey(key=<DOWN>), RedirectKey(key=<DOWN>) ]
+             , symbols[Group4] = [ U2193, NoSymbol ] // DOWNWARDS ARROW, <none>
+  };
+  key <AC11> { symbols[Group1] = [ U0027, U0022 ] // APOSTROPHE, QUOTATION MARK
+             , symbols[Group2] = [ U0301, NoSymbol ] // COMBINING ACUTE ACCENT, <none>
+             , symbols[Group3] = [ NoSymbol, NoSymbol ] // Redirect(<RGHT>), Redirect(<RGHT>)
+             , actions[Group3] = [ RedirectKey(key=<RGHT>), RedirectKey(key=<RGHT>) ]
+             , symbols[Group4] = [ U2192, U21D2 ] // RIGHTWARDS ARROW, RIGHTWARDS DOUBLE ARROW
+  };
+  key <BKSL> { symbols[Group1] = [ U0060, U0300 ] // GRAVE ACCENT, COMBINING GRAVE ACCENT
+             , symbols[Group2] = [ U00AB, U00BB ] // LEFT-POINTING DOUBLE ANGLE QUOTATION MARK, RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK
+             , symbols[Group3] = [ NoSymbol, NoSymbol ] // Redirect(<PGDN>), Redirect(<PGDN>)
+             , actions[Group3] = [ RedirectKey(key=<PGDN>), RedirectKey(key=<PGDN>) ]
+             , symbols[Group4] = [ U2194, NoSymbol ] // LEFT RIGHT ARROW, <none>
+  };
+
+  key <LSGT> { symbols[Group1] = [ U002F, U007C ] // SOLIDUS, VERTICAL LINE
+             , symbols[Group2] = [ U005C, U2016 ] // REVERSE SOLIDUS, DOUBLE VERTICAL LINE
+             , symbols[Group3] = [ NoSymbol, NoSymbol ] // <none>, <none>
+             , symbols[Group4] = [ NoSymbol, NoSymbol ] // <none>, <none>
+  };
+  key <AB01> { symbols[Group1] = [ U007A, U005A ] // LATIN SMALL LETTER Z, LATIN CAPITAL LETTER Z
+             , symbols[Group2] = [ U2208, U2209 ] // ELEMENT OF, NOT AN ELEMENT OF
+             , symbols[Group3] = [ NoSymbol, U2124 ] // <none>, DOUBLE-STRUCK CAPITAL Z
+             , symbols[Group4] = [ U03B6, NoSymbol ] // GREEK SMALL LETTER ZETA, <none>
+  };
+  key <AB02> { symbols[Group1] = [ U0078, U0058 ] // LATIN SMALL LETTER X, LATIN CAPITAL LETTER X
+             , symbols[Group2] = [ U00D7, U2297 ] // MULTIPLICATION SIGN, CIRCLED TIMES
+             , symbols[Group3] = [ NoSymbol, NoSymbol ] // <none>, <none>
+             , symbols[Group4] = [ NoSymbol, NoSymbol ] // <none>, <none>
+  };
+  key <AB03> { symbols[Group1] = [ U0063, U0043 ] // LATIN SMALL LETTER C, LATIN CAPITAL LETTER C
+             , symbols[Group2] = [ U005E, U0302 ] // CIRCUMFLEX ACCENT, COMBINING CIRCUMFLEX ACCENT
+             , symbols[Group3] = [ NoSymbol, NoSymbol ] // <none>, <none>
+             , symbols[Group4] = [ NoSymbol, NoSymbol ] // <none>, <none>
+  };
+  key <AB04> { symbols[Group1] = [ U0076, U0056 ] // LATIN SMALL LETTER V, LATIN CAPITAL LETTER V
+             , symbols[Group2] = [ U2227, U2228 ] // LOGICAL AND, LOGICAL OR
+             , symbols[Group3] = [ U2229, U222A ] // INTERSECTION, UNION
+             , symbols[Group4] = [ NoSymbol, NoSymbol ] // <none>, <none>
+  };
+  key <AB05> { symbols[Group1] = [ U0062, U0042 ] // LATIN SMALL LETTER B, LATIN CAPITAL LETTER B
+             , symbols[Group2] = [ U0023, NoSymbol ] // NUMBER SIGN, <none>
+             , symbols[Group3] = [ NoSymbol, NoSymbol ] // <none>, <none>
+             , symbols[Group4] = [ U03B2, NoSymbol ] // GREEK SMALL LETTER BETA, <none>
+  };
+  key <AB06> { symbols[Group1] = [ U006B, U004B ] // LATIN SMALL LETTER K, LATIN CAPITAL LETTER K
+             , symbols[Group2] = [ U2261, NoSymbol ] // IDENTICAL TO, <none>
+             , symbols[Group3] = [ NoSymbol, NoSymbol ] // <none>, <none>
+             , symbols[Group4] = [ NoSymbol, NoSymbol ] // <none>, <none>
+  };
+  key <AB07> { symbols[Group1] = [ U006D, U004D ] // LATIN SMALL LETTER M, LATIN CAPITAL LETTER M
+             , symbols[Group2] = [ U002A, U2218 ] // ASTERISK, RING OPERATOR
+             , symbols[Group3] = [ NoSymbol, NoSymbol ] // <none>, <none>
+             , symbols[Group4] = [ U03C9, U03A9 ] // GREEK SMALL LETTER OMEGA, GREEK CAPITAL LETTER OMEGA
+  };
+  key <AB08> { symbols[Group1] = [ U002C, U003B ] // COMMA, SEMICOLON
+             , symbols[Group2] = [ U0327, U0323 ] // COMBINING CEDILLA, COMBINING DOT BELOW
+             , symbols[Group3] = [ NoSymbol, NoSymbol ] // <none>, <none>
+             , symbols[Group4] = [ NoSymbol, NoSymbol ] // <none>, <none>
+  };
+  key <AB09> { symbols[Group1] = [ U002E, U003A ] // FULL STOP, COLON
+             , symbols[Group2] = [ U22C5, U2219 ] // DOT OPERATOR, BULLET OPERATOR
+             , symbols[Group3] = [ U2299, NoSymbol ] // CIRCLED DOT OPERATOR, <none>
+             , symbols[Group4] = [ NoSymbol, NoSymbol ] // <none>, <none>
+  };
+  key <AB10> { symbols[Group1] = [ U002D, U2014 ] // HYPHEN-MINUS, EM DASH
+             , symbols[Group2] = [ U2026, U22EF ] // HORIZONTAL ELLIPSIS, MIDLINE HORIZONTAL ELLIPSIS
+             , symbols[Group3] = [ NoSymbol, NoSymbol ] // <none>, <none>
+             , symbols[Group4] = [ NoSymbol, NoSymbol ] // <none>, <none>
+  };
+
+};
+
