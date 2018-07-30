@@ -9,7 +9,7 @@ import XMonad.Util.EZConfig
 import System.IO
 import XMonad.Hooks.EwmhDesktops (ewmh)
 import XMonad.Config.Desktop
-import System.Taffybar.Hooks.PagerHints (pagerHints)
+-- import System.Taffybar.Hooks.PagerHints (pagerHints)
 import qualified Data.Map as M
 import Data.Ratio
 import XMonad.Hooks.ManageHelpers
@@ -24,7 +24,7 @@ import XMonad.Layout.Named
 import XMonad.Layout.NoBorders
 -- import DBus.Client
 -- import System.Taffybar.XMonadLog (dbusLogWithPP, taffybarDefaultPP, taffybarColor, taffybarEscape)
-import System.Taffybar.TaffyPager
+-- import System.Taffybar.TaffyPager
 
 import XMonad.Actions.RotSlaves
 import XMonad.Actions.CycleWindows
@@ -123,9 +123,9 @@ gridLayout    = named "grid" Grid
 spiralLayout  = named "spiral" $ spiral (3 % 4)
 
 myLayoutHook = smartBorders $ avoidStruts $
-  singleLayout ||| mkToggle (single MIRROR) (basicLayout ||| circleLayout ||| twoPaneLayout ||| mosaicLayout ||| gridLayout ||| spiralLayout)
+  singleLayout ||| mkToggle (single MIRROR) (basicLayout ||| twoPaneLayout ||| spiralLayout)
 
-main = xmonad $ docks $ ewmh $ pagerHints $ def
+main = xmonad $ docks $ ewmh $ def
          { modMask = mod4Mask
          , focusFollowsMouse = False
          -- , startupHook = spawn "taffybar"
