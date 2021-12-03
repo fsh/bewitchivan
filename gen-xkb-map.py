@@ -121,12 +121,27 @@ xkb_symbols "basic" {{
 
   // Why doesn't MENU = RWIN work?
   // Fucking MENU key.
-  alias <MENU> = <COMP>;
-  alias <RWIN> = <COMP>;
 
-  // Make AltGr select group +1 and RWIN select group +2.
   replace key <RALT> {{ type="ONE_LEVEL", [ Mode_switch, Mode_switch ] }};
   replace key <COMP> {{
+    type="ONE_LEVEL",
+    symbols[Group1] = [NoSymbol],
+    symbols[Group2] = [NoSymbol],
+    symbols[Group3] = [NoSymbol],
+    symbols[Group4] = [NoSymbol],
+    actions[Group1] = [ SetGroup(group=3), SetGroup(group=3) ],
+    actions[Group2] = [ SetGroup(group=4), SetGroup(group=4) ]
+  }};
+  replace key <RWIN> {{
+    type="ONE_LEVEL",
+    symbols[Group1] = [NoSymbol],
+    symbols[Group2] = [NoSymbol],
+    symbols[Group3] = [NoSymbol],
+    symbols[Group4] = [NoSymbol],
+    actions[Group1] = [ SetGroup(group=3), SetGroup(group=3) ],
+    actions[Group2] = [ SetGroup(group=4), SetGroup(group=4) ]
+  }};
+  replace key <RCTL> {{
     type="ONE_LEVEL",
     symbols[Group1] = [NoSymbol],
     symbols[Group2] = [NoSymbol],
