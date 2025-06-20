@@ -1,0 +1,311 @@
+# The YAML is organized like a big tree (mappings within mappings).
+#
+# I'll call top-level mappings "sections." Some special sections like GROUPS, MODIFIERS, LITERALS
+# add specific functionality. (See their usage at the bottom.)
+#
+# Other (regular) sections are structured such that the leaves (lists and strings) associates key(s)
+# to symbol(s), and the "path" to get to that leaf defines the modifiers (and optionally the keycode
+# if the leaf does not). Apart from the BASE section, their top-level names is ignored.
+#
+# Examples are below. These assumes modifiers "shift" (first bit), "alt" (second bit) and "comp"
+# (third bit).
+#
+# Verbose key-by-key assignment:
+#
+# ------
+# IndirectVsDirect:
+#   # Indirect assignment to the keycode that was bound to a given symbol in the BASE layer.
+#   shift+z: '@' # makes shift+<key_bound_to_z> ⇒ '@'
+#   alt+8: '∞' # same deal, alt+<key_that_produces_8> ⇒ ∞
+#
+#   # Or use XKB key codes directly:
+#   <AB02>: '*' # KEY_X (on QWERTY) becomes '*'
+#
+# MySectionA:
+#   alt:
+#     shift:
+#       g: '$' # makes shift+alt+g produce symbol $
+#
+#   # Mods+key can be composed with '+'. Order of mods doesn't matter, but if a key is present it
+#   # must be last:
+#   alt+shift+y: '≠' # shift+alt+y ⇒ ≠
+#
+#   # But beware of specifying duplicates:
+#   alt: # Error: conflicts with the first `alt` entry.
+#     …
+#
+#   none: # `none` means no mods are added going down this path.
+#     shift:
+#       p: 'ℙ' # shift+p ⇒ ℙ
+#
+#   shift+p: … # Error: reassigns shift+p.
+#
+# SectionB:
+#   # Sections can have a special `mods` entry which gets implicitly added to all other entries at
+#   # this level.
+#   mods: shift+comp
+#   alt:
+#     g: '$' # shift+alt+comp+g => $
+# ------
+#
+# It's usually more convenient to assign many keys at once:
+#
+# ------
+# LevelsByKey:
+#   # Using a list will assign many levels at once.
+#   alt+h: ['∈', '∉', '%', '÷']
+#
+#   # Note that modifiers are like bits, so <alt> + 2 → <comp>, so the above is equivalent to:
+#   h:
+#     alt: '∈'
+#     shift+alt: '∉'
+#     comp: '%'
+#     shift+comp: '÷'
+#
+# RowByRow:
+#   # Any number comp+<keys> specified in a row-by-row way:
+#   comp:
+#     - [ '/', '1', '2', …] # The ellipses just indicate elision, it is not part of the syntax
+#     - [ q, w, f, …]
+#     - [ a, r, s, …]
+#     - [ z, x, …]
+#
+# AlphabetStrings:
+#   # if the leaf is a string of length 26 it's interpreted as specifying <mods>+a, <mods>+b, etc.
+#   alt: "𝔞𝔟𝔠𝔡𝔢𝔣𝔤𝔥𝔦𝔧𝔨𝔩𝔪𝔫𝔬𝔭𝔮𝔯𝔰𝔱𝔲𝔳𝔴𝔵𝔶𝔷'
+#
+#   # if the leaf is a string of length 10 it's interpreted as specifying <mods>+0, <mods>+1, etc.
+#   alt: "₀₁₂₃₄₅₆₇₈₉"
+# ------
+#
+# Most places where you specify a single symbol with 'x', you also use a string with _two_ symbols
+# to assign both <mods>+<key> and shift+<mods>+<key> at the same time:
+#
+# ------
+# NormalAndShift:
+#   alt+w: "≈≉" # alt+w ⇒ ≈, shift+alt+w ⇒ ≉
+# ------
+#
+# Finally, sections may have a special `group` entry that causes all its leaves to be put into a
+# different group. Currently I only use latched groups. After you've pressed the latch key the next
+# key-combination you enter is looked up in that group instead of the default one, and then the
+# latch resets. You can think of latch keys as a dead-key, the way you would on some systems press
+# <umlaut (¨)> and then <a> to produce 'ä'.
+#
+# GROUPS:
+#   emo: '<AE11>' # defines the latch key.
+#
+# ExtraStuff:
+#   group: emo
+#   a: "☹" # <AE11> ⇒ a ⇒ ☹
+#   alt-a: "☯" # <AE11> ⇒ alt+a ⇒ ☯
+
+
+# The base of the keymap. This will be processed first and should at the very least map symbols
+# in the first group1 layer.
+BASE:
+  none:
+    - [ '/',  '1',  '2',  '3',  '4',  '5',  '6',  '7',  '8',  '9',  '0',  null,  null ]
+    - [ 'q',  'w',  'f',  'p',  'g',  'j',  'l',  'u',  'y',  'ø',  'å',  'æ' ]
+    - [ 'a',  'r',  's',  't',  'd',  'h',  'n',  'e',  'i',  'o',  "'",  '`' ]
+    - [ '/',  'z',  'x',  'c',  'v',  'b',  'k',  'm',  ',',  '.',  '-' ]
+  shift:
+    - [ '|',  '',   '',   '',   '',   '',   '',   '',   '',   '',   '',   '',   '' ]
+    - [ 'Q',  'W',  'F',  'P',  'G',  'J',  'L',  'U',  'Y',  'Ø',  'Å',  'Æ' ]
+    - [ 'A',  'R',  'S',  'T',  'D',  'H',  'N',  'E',  'I',  'O',  '"',  '|' ]
+    - [ '|',  'Z',  'X',  'C',  'V',  'B',  'K',  'M',  ';',  ':',  '—' ]
+
+Sub- and Superscript Numbers:
+  shift: "⁰¹²³⁴⁵⁶⁷⁸⁹"
+  alt: "₀₁₂₃₄₅₆₇₈₉"
+
+Symbols and Accents:
+  mods: alt
+  none:
+    - [ '\‖',  '§¶',   '',   '¢£',   '¤¥',   '',   '',   '',   '',   '',   '',   '',   '' ]
+    - [ '?¿',  '!¡',  '$€',  '+±',  '&',  '',   '%÷',  '_',  '=≠',  '¨',  '°',  'ˇ' ]
+    - [ '@',  '{',  '[⟦',  '(',  '<≤',  '>≥',  ')',  ']⟧',  '}',  '~',  '',  '' ]
+    - [ '\‖', '∈¢',  '×⨯',  '^',  '¬',   '#♯',  '≅≇',  '*',  '',  '⋅',  '…' ]
+  # None of these should conflict with the above.
+  shift:
+    '2': 'combining double acute accent'
+    '8': 'combining infinity'
+    'u': 'combining low line'
+    'å': 'combining ring above'
+    'ø': 'combining diaeresis'
+    'æ': 'combining caron'
+    'i': 'combining dot above'
+    'o': 'combining tilde'
+    "'": 'combining acute accent'
+    "`": 'combining grave accent'
+    'c': 'combining circumflex accent'
+    'm': 'combining macron'
+    ',': 'combining cedilla'
+    '.': 'combining dot below'
+    '-': 'combining long stroke overlay'
+
+  comp:
+    - [ ] # I don't use this row much.
+    - [ '',  '',  '',  '',  '',  '',  '↕⇕',  '↑⇑',  '↔⇔',  '',  '',  '' ]
+    - [ '',  '',  '',  '',  '',  '',  '←⇐',  '↓⇓',  '→⇒',  '',  "",  '' ]
+    - [ '',  '',  '',  '',  '',  '',  '',  'µ',  '',  '',  '' ]
+
+Extra Su*script:
+  mods: comp+alt
+  none: "ₐ...ₑ..ₕᵢⱼₖₗₘₙₒₚ.ᵣₛₜᵤᵥ.ₓ.."
+  shift: "ᵃᵇᶜᵈᵉᶠᵍʰⁱʲᵏˡᵐⁿᵒᵖ𐞥ʳˢᵗᵘᵛʷˣʸᶻ"
+  '.': 'ₔᵊ'
+  '-': '₋⁻'
+  "'": '₍⁽'
+  '`': '₎⁾'
+  <AE11>: '₊⁺'
+  <AE12>: '₌⁼'
+
+
+Extra Alphabets:
+  group: alphabets
+
+  # Math letters.
+  none:           '𝑎𝑏𝑐𝑑𝑒𝑓𝑔ℎ𝑖𝑗𝑘𝑙𝑚𝑛𝑜𝑝𝑞𝑟𝑠𝑡𝑢𝑣𝑤𝑥𝑦𝑧'
+  shift:          '𝔸𝔹ℂ𝔻𝔼𝔽𝔾ℍ𝕀𝕁𝕂𝕃𝕄ℕ𝕆ℙℚℝ𝕊𝕋𝕌𝕍𝕎𝕏𝕐ℤ'
+  alt:            'αβχδεφγθι?κλ?ηωπ?ρστμνψξυζ'
+  alt+shift:      '???Δ?ΦΓΘ???Λ??Ω???Σ???ΨΞ??'
+  comp+alt:       '𝔞𝔟𝔠𝔡𝔢𝔣𝔤𝔥𝔦𝔧𝔨𝔩𝔪𝔫𝔬𝔭𝔮𝔯𝔰𝔱𝔲𝔳𝔴𝔵𝔶𝔷'
+  comp+alt+shift: '𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳'
+  # Various other weird/int'l letters.
+  comp:
+    l: ['ł', 'Ł']
+    ø: ['œ', 'Œ']
+    a: ['ℵ']
+    s: ['ß', 'ẞ']
+    t: ['þ', 'Þ']
+    d: ['ð', 'Ð']
+    h: ['ħ', 'Ħ']
+    n: ['ŋ', 'Ŋ']
+    e: ['ə', 'Ə']
+    z: ['ſ']
+
+SubandSuper:
+  group: alphabets
+
+
+# Math and more symbols.
+Math:
+  group: math
+
+  none:
+    - [ '',   '',   '√⎷', '∛',  '∜',  '∮∬',   '',   '',   '∞',  '9', '​‍', '',   '' ]
+    - [ '∎',  '∴∵',  '⊥', '∏',   '∇',  '',  'ℓℒ',  'u',  '≡≢', '∅', '⌊⌈', '⌋⌉' ]
+    - [ '∀',  'ℛ',  '∑',  '⊤',  '⋄',  'ℋ',  'n',  '∃∄', '∆',  '∘∙', '‹«',  '›»' ]
+    - [ '∕∣', '⊕∊', '⊗✕', '∂∫',  '∨',  '∧',  '≃≄', '⋆∗', '⋮',  '⊙', '⊖' ]
+
+  alt:
+    - [ '',   '',   '',   '',   '',   '',   '',   '',   '', '',   '',  null, null ]
+    - [ '',   '',   'ℯℰ',  '∝',   'ℊ',   '',   'ℒ',  '∪', '≈≉', '℘',   '',  ' ' ]
+    - [ '',   '', '⊲⊴', '⊆⊈', '⊂⊄', '⊃⊅', '⊇⊉', '⊳⊵',  '∩', '', "≪⋘", '≫⋙' ]
+    - [ '', '∈∉',   '',   '',   '',   '',   '',   '',   '', '', ' ' ]
+
+  comp:
+    - [ '',   '☹',  '☺☻', '',   '',   '',   '',   '',  '࿕࿗', '࿖࿘', '',  '', '' ]
+    - [ '♕♛', '⁉‼', '♀♂', '',   '',   '',   '',   '',  '☯',  '',   '',  ' ' ]
+    - [ '⚕',  '®',  '☆★', '✝✚', '',   '♡❤', '',   '',  '⚚',  '',   '◀', '▶' ]
+    - [ '',   '',   '✗✘', '©',  '✓✔', '',   '♔♚', '™', '',   '',   '' ]
+
+
+# Defines the modifiers. These are used to traverse the other sections. Note: per now, only the
+# entries mapped to mod Shift, LevelThree, or LevelFive are used for the other sections.
+MODIFIERS:
+  shift:
+    keycodes: [ '<LFSH>', '<RTSH>' ]
+    keysyms: [ Shift_L, Shift_R ]
+    mod: Shift
+
+  alt:
+    keycodes: [ '<RALT>' ]
+    keysyms: ISO_Level3_Shift
+    mod: LevelThree
+    x11: None # Hides it in X11.
+
+  comp:
+    # In my experience, manufacturers love to randomize the keys they include on the right side of
+    # Spacebar. These are the keys I've encountered beyond <RALT>. Normally there will be <RALT>,
+    # <RCTRL>, with 0-2 RANDOM keys between them. Often they stick those retarded hardware-only "Fn"
+    # keys in there too. Note: <COMP> and <MENU> is the same keycode(?) so no need to bind both.
+    keycodes: [ '<COMP>', '<RCTL>', '<RWIN>', '<PRSC>' ] 
+    keysyms: ISO_Level5_Shift
+    mod: LevelFive
+    x11: None
+
+  # For i3, my window manager.
+  super:
+    keycodes: [ '<LWIN>' ]
+    keysyms: Super_L
+    mod: Super
+    x11: Mod4 # Adds a `modifier_map <key> { <mod> };` entry.
+
+  # On one of my laptops <I151> is a non-hardware Fn key conveniently placed where <RCTL> _ought_ to
+  # be.
+  ctrl:
+    keycodes: [ '<LCTL>', '<I151>' ]
+    keysyms: Control_L
+    x11: Control
+
+# Defines the latch groups and the key used to access them. These keys must be specified by XKB
+# code. Note: XKB/X11 has a hard limit of 4 groups (protocol uses 2 bits). That's why we push so
+# much into layers instead.
+GROUPS:
+  math: '<AE11>' # key right of '0'
+  alphabets: '<AE12>' # key left of Backspace.
+  other: 'shift+<AE11>' # not using this yet.
+
+
+# Special section to copy stuff literally to the XKB output (in `xkb_symbols`).
+LITERALS:
+  # Assign the arrow keys and all that noise.
+  basic_map: |
+    include "pc+no(colemak)" // my basic layout is a Colemak-based Norwegian-ish layout.
+  # Surely no intelligent person thinks they make so few mistakes typing that it makes sense to
+  # place Backspace in Siberia.
+  sane_backspace: |
+    include "capslock(backspace)"
+
+# Whenever we specify symbols by rows, this defines the keycodes to map them to. The one specified
+# here matches most Scandinavian keyboard.
+ROWS:
+  - ['<TLDE>', '<AE01>', '<AE02>', '<AE03>', '<AE04>', '<AE05>', '<AE06>', '<AE07>', '<AE08>', '<AE09>', '<AE10>', '<AE11>', '<AE12>']
+  - ['<AD01>', '<AD02>', '<AD03>', '<AD04>', '<AD05>', '<AD06>', '<AD07>', '<AD08>', '<AD09>', '<AD10>', '<AD11>', '<AD12>']
+  - ['<AC01>', '<AC02>', '<AC03>', '<AC04>', '<AC05>', '<AC06>', '<AC07>', '<AC08>', '<AC09>', '<AC10>', '<AC11>', '<BKSL>']
+  - ['<LSGT>', '<AB01>', '<AB02>', '<AB03>', '<AB04>', '<AB05>', '<AB06>', '<AB07>', '<AB08>', '<AB09>', '<AB10>' ]
+  - ['<SPCE>']
+
+
+# TODO:
+
+# 𝒜𝒞𝒟𝒢𝒥𝒦𝒩𝒪𝒫𝒬𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵
+# 𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩
+# 𝒶𝒷𝒸𝒹-𝒻-𝒽𝒾𝒿𝓀𝓁𝓂𝓃-𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏
+# 𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃
+
+# SCRIPT SMALL G
+#  SCRIPT SMALL E
+# ℴ SCRIPT SMALL O
+#  SCRIPT SMALL L
+#  SCRIPT CAPITAL H
+# ℐ SCRIPT CAPITAL I
+#  SCRIPT CAPITAL L
+#  SCRIPT CAPITAL P
+#  SCRIPT CAPITAL R
+# ℬ SCRIPT CAPITAL B
+# SCRIPT CAPITAL E
+# ℱ SCRIPT CAPITAL F
+# ℳ SCRIPT CAPITAL M
+# ≻⊁≽⋡
+# ≺⊀≼⋠
+
+# '⅐', '⅑',
+# '⅓', '⅔',
+# '⅕', '⅖', '⅗', '⅘',
+# '⅙', '⅚',
+# '⅛', '¼', '⅜', '½', '⅝', '¾', '⅞'
+
+
