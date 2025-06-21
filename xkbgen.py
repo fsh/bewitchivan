@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 """
 YAML→XKB Keymap Generator
 
@@ -32,7 +32,7 @@ def isstr(x: Any) -> bool:
 def ensure_list(x: Any) -> list|tuple:
   return x if islist(x) else (x,)
 
-logging.basicConfig(level=logging.DEBUG, format="%(relativeCreated)6.1f %(levelname)s: %(message)s")
+logging.basicConfig(level=logging.WARNING, format="%(relativeCreated)6.1f %(levelname)s: %(message)s")
 log = logging.getLogger()
 
 @dataclass(slots=True)
@@ -150,7 +150,7 @@ class KeymapBuilder():
     if not keysym.keycode:
       raise ValueError(f"attempting to assign a symbol to an unknown key {keysym}")
     if not symbol:
-      log.warning(f"Ignoring empty symbol for {keysym}.")
+      log.info(f"Ignoring empty symbol for {keysym}.")
       return
     if not KEYCODE_RE.match(keysym.keycode):
       if keysym.keycode not in self._basemap:
