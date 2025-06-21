@@ -154,11 +154,12 @@ class KeymapBuilder():
       return
     if not KEYCODE_RE.match(keysym.keycode):
       if keysym.keycode not in self._basemap:
-        raise ValueError(f"can't interpret inderect bind to {keysym.keycode} because it wasn't mapped in the BASE layer")
+        raise ValueError(
+          f"can't interpret indirect bind to {keysym.keycode} because it wasn't mapped in the BASE layer")
       keysym.keycode = self._basemap[keysym.keycode]
     if len(symbol) == 2 or (len(symbol) == 3 and symbol[1] in ' /:,'):
       self.set_key_symbol(keysym, symbol[0])
-      self.set_key_symbol(keysym.add_level(1), symbol[0])
+      self.set_key_symbol(keysym.add_level(1), symbol[-1])
       return
     # Make sure there's only one canonical KeySym for each keycode×group×level.
     try:
