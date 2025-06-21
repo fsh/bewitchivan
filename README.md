@@ -1,14 +1,16 @@
-# Bewitchivan Keyboard Layout Tools
+# YAML → XKB Config Generator
 
-This repo contains a set of scripts and data files used to create custom XKB
-keyboard layouts from YAML configuration files.  It also includes a helper for
-looking up Unicode characters when building the layouts.
+A utility script used to create custom XKB keyboard layouts from YAML configuration files.
+
+I use a heavily modified Colemak layout with lots of math (∑⋅∘∇∃∄∂∫×∈…), alphabets (𝑎𝑏𝑐, 𝔸𝔹ℂ, αβγ,
+ℯℰ¹²³₁₂₃…), accents (e̊ëěẹėȩẽê…) and and miscellaneous symbols (←↑⇐⇑☹✓©…). Maintaining it with some
+kind of GUI layout editor was a nightmare.
 
 ## Contents
 
 - `xkbgen.py` – Converts a YAML description of a keyboard layout into an XKB
   keymap.
-- `franksh.yaml` – Sample YAML file describing a rather involved layout that
+- `franksh.yaml` – Sample YAML file describing a layout that
   makes use of multiple modifier layers and latch groups.
 - `unigrep.py` – Small utility that greps `UnicodeData.txt` so you can search
   for characters by name when editing the YAML.
@@ -27,9 +29,6 @@ The resulting `mymap.xkb` file can then be loaded with `xkbcomp`:
 ```bash
 xkbcomp mymap.xkb $DISPLAY
 ```
-
-`xkbgen.py` outputs diagnostic messages to stderr.  Only warnings are shown by
-default.
 
 ## Searching Unicode
 

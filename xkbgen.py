@@ -7,11 +7,6 @@ $ ./xkbgen.py YAML_FILE > mymap.xkb
 $ xkbcomp mymap.xkb $DISPLAY
 ```
 """
-
-# ─────────────────────────────────────────────────────────────────────────────
-#  ↑↑↑  END OF USER‑EDITABLE AREA  ↑↑↑
-# ─────────────────────────────────────────────────────────────────────────────
-
 import sys, re, textwrap, yaml, unicodedata as ud
 import logging
 from typing import Any, Self, Iterator
@@ -190,7 +185,6 @@ class KeymapBuilder():
         self.add_spec(keysym.add_level(l), sym)
       return
 
-    # assert not keysym.keycode:
     if self._ROWS is None:
       raise ValueError(f"can't specify a row-by-row layout when you didn't use a 'ROWS' section")
     for keys, syms in zip(self._ROWS, data):
@@ -310,36 +304,40 @@ def xkb_symbol(sym: str):
     return sym
 
 
-if len(sys.argv) != 2:
-  print(f'usage: {sys.argv[0]} <YAML_FILE>')
-  sys.exit(0)
+def build_xkb_config(spec: dict) -> str:
+  if not isinstance(spec, dict):
+    raise ValueError("YAML top level must be a mapping")
+  if any(x not in spec for x in ['BASE', 'MODIFIERS']):
+    raise ValueError(f"BASE and MODIFIERS sections are mandatory")
 
-with open(sys.argv[1], 'r') as fil:
-  yaml_doc = yaml.safe_load(fil)
+  km = KeymapBuilder(spec.pop('ROWS', None))
 
-if not isinstance(yaml_doc, dict):
-  raise ValueError("YAML top level must be a mapping")
-if any(x not in yaml_doc for x in ['BASE', 'MODIFIERS']):
-  raise ValueError(f"BASE and MODIFIERS sections are mandatory")
+  for name, text in spec.pop('LITERALS', {}).items():
+    km._xkb_literals[0].append(text)
 
-km = KeymapBuilder(yaml_doc.pop('ROWS', None))
+  log.info(f"Adding modifiers…")
+  for name, moddata in spec.pop('MODIFIERS').items():
+    km.add_mod(name, moddata)
 
-for name, text in yaml_doc.pop('LITERALS', {}).items():
-  km._xkb_literals[0].append(text)
+  for name, keystr in spec.pop('GROUPS', {}).items():
+    km.add_latch(name, keystr)
 
-log.info(f"Adding modifiers…")
-for name, moddata in yaml_doc.pop('MODIFIERS').items():
-  km.add_mod(name, moddata)
+  basedata = spec.pop('BASE')
+  log.info(f"Processing [BASE]…")
+  km.add_spec(KeySym(), basedata)
 
-for name, keystr in yaml_doc.pop('GROUPS', {}).items():
-  km.add_latch(name, keystr)
+  for name, spec in spec.items():
+    log.info(f"Merging [%s]…", name)
+    km.add_spec(KeySym(), spec)
 
-basedata = yaml_doc.pop('BASE')
-log.info(f"Processing [BASE]…")
-km.add_spec(KeySym(), basedata)
+  return km.xkb_keymap()
 
-for name, spec in yaml_doc.items():
-  log.info(f"Merging [%s]", name)
-  km.add_spec(KeySym(), spec)
+if __name__ == '__main__':
+  if len(sys.argv) != 2:
+    print(f'usage: {sys.argv[0]} <YAML_FILE>')
+    sys.exit(0)
 
-print(km.xkb_keymap())
+  with open(sys.argv[1], 'r') as fil:
+    spec = yaml.safe_load(fil)
+
+  print(build_xkb_config(spec))
