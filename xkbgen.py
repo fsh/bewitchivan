@@ -297,7 +297,7 @@ def xkb_symbol(sym: str):
     uname = '?'
     try:
       uname = ud.name(sym)
-    except KeyError:
+    except (KeyError, ValueError):
       log.warning(f"failed to look up Unicode name: {sym} (U{ord(sym):04x})")
     return f"U{ord(sym):04X} // {uname}\n"
   else:
